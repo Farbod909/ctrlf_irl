@@ -1,0 +1,6 @@
+framework module Pods_ctrlf_irl {
+  umbrella header "Pods-ctrlf_irl-umbrella.h"
+
+  export *
+  module * { export * }
+}
