@@ -29,6 +29,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     override func viewDidLoad() {
         super.viewDidLoad()
         searchField.delegate = self
+
+        findButton.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1), for: .disabled)
+        findButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -59,6 +62,37 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         pickedImage.contentMode = .scaleAspectFit
         pickedImage.image = image
         self.dismiss(animated: true, completion: nil);
+
+        self.getWordStore()
+    }
+
+    func getWordStore() {
+        let headers: HTTPHeaders = [
+            "Content-Type": "application/octet-stream",
+            "Ocp-Apim-Subscription-Key": "694773d0aa5d4f0b9ed096a2e8e1fc29"
+        ]
+
+        let imageData = UIImageJPEGRepresentation(pickedImage.image!, 0.99)!
+
+        if debugMode {
+            let imageSize: Int = imageData.count
+            printDebug("size of image uploaded (kb): \(Double(imageSize) / 1024.0) ")
+        }
+
+
+        Alamofire.upload(imageData, to: "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=true", headers: headers).responseJSON { response in
+
+            let json = JSON(data: response.data!)
+            for region in json["regions"].arrayValue {
+                for line in region["lines"].arrayValue {
+                    for word in line["words"].arrayValue {
+                        self.wordStore.append((word["text"].stringValue, word["boundingBox"].stringValue))
+                    }
+                }
+            }
+            self.findButton.isEnabled = true
+        }
+
     }
 
     func drawCustomImage(size: CGSize) -> UIImage {
@@ -126,61 +160,34 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let box_max_height: CGFloat = 3243.0
         let padding: CGFloat = 5.0
 
-        let headers: HTTPHeaders = [
-            "Content-Type": "application/octet-stream",
-            "Ocp-Apim-Subscription-Key": "694773d0aa5d4f0b9ed096a2e8e1fc29"
-        ]
+        var highlightedBoundingBoxes = [String]()
 
-        let imageData = UIImageJPEGRepresentation(pickedImage.image!, 0.99)!
-
-        if debugMode {
-            let imageSize: Int = imageData.count
-            printDebug("size of image uploaded (kb): \(Double(imageSize) / 1024.0) ")
+        for wordTuple in self.wordStore {
+            if wordTuple.0.lowercased().contains(self.searchField.text!.lowercased()) {
+                highlightedBoundingBoxes.append(wordTuple.1)
+            }
         }
 
+        if debugMode {
+            printDebug("all words: \(self.wordStore)")
+            printDebug("boxes that should be highlighted: \(highlightedBoundingBoxes)")
+        }
 
-        Alamofire.upload(imageData, to: "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=true", headers: headers).responseJSON { response in
+        DispatchQueue.main.async { [unowned self] in
+            for box in highlightedBoundingBoxes {
+                let box_vals = box.components(separatedBy: ",")
 
-            let json = JSON(data: response.data!)
-            for region in json["regions"].arrayValue {
-                for line in region["lines"].arrayValue {
-                    for word in line["words"].arrayValue {
-                        self.wordStore.append((word["text"].stringValue, word["boundingBox"].stringValue))
-                    }
-                }
-            }
+                let x: CGFloat = CGFloat(Int(box_vals[0])!)*(photoSize.width/box_max_width)-padding     // /6.2
+                let y: CGFloat = CGFloat(Int(box_vals[1])!)*(photoSize.height/box_max_height)+topMargin-padding     // /5.8
+                let w: CGFloat = CGFloat(Int(box_vals[2])!)*(photoSize.width/box_max_width)+padding     // /5.2
+                let h: CGFloat = CGFloat(Int(box_vals[3])!)*(photoSize.height/box_max_height)+padding     // /4.0
 
+                let imageSize = CGSize(width: w, height: h)
+                let imageView = UIImageView(frame: CGRect(origin: CGPoint(x: x, y: y), size: imageSize))
 
-
-            var highlightedBoundingBoxes = [String]()
-
-            for wordTuple in self.wordStore {
-                if wordTuple.0.lowercased().contains(self.searchField.text!.lowercased()) {
-                    highlightedBoundingBoxes.append(wordTuple.1)
-                }
-            }
-
-            if debugMode {
-                printDebug("all words: \(self.wordStore)")
-                printDebug("boxes that should be highlighted: \(highlightedBoundingBoxes)")
-            }
-
-            DispatchQueue.main.async { [unowned self] in
-                for box in highlightedBoundingBoxes {
-                    let box_vals = box.components(separatedBy: ",")
-
-                    let x: CGFloat = CGFloat(Int(box_vals[0])!)*(photoSize.width/box_max_width)-padding     // /6.2
-                    let y: CGFloat = CGFloat(Int(box_vals[1])!)*(photoSize.height/box_max_height)+topMargin-padding     // /5.8
-                    let w: CGFloat = CGFloat(Int(box_vals[2])!)*(photoSize.width/box_max_width)+padding     // /5.2
-                    let h: CGFloat = CGFloat(Int(box_vals[3])!)*(photoSize.height/box_max_height)+padding     // /4.0
-
-                    let imageSize = CGSize(width: w, height: h)
-                    let imageView = UIImageView(frame: CGRect(origin: CGPoint(x: x, y: y), size: imageSize))
-
-                    self.pickedImage.addSubview(imageView)
-                    let image = self.drawCustomImage(size: imageSize)
-                    imageView.image = image
-                }
+                self.pickedImage.addSubview(imageView)
+                let image = self.drawCustomImage(size: imageSize)
+                imageView.image = image
             }
         }
     }
@@ -194,8 +201,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
-        self.findClicked(findButton)
-        return true
+        if self.wordStore.count > 0 {
+            self.findClicked(findButton)
+            return true
+        }
+        return false
     }
 }
 
