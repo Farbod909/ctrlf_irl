@@ -32,6 +32,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
         findButton.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1), for: .disabled)
         findButton.isEnabled = false
+        searchField.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,6 +64,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         pickedImage.image = image
         self.dismiss(animated: true, completion: nil);
 
+        clearHighlights()
+        searchField.text = ""
+        findButton.isEnabled = false
+        searchField.isEnabled = false
         self.getWordStore()
     }
 
@@ -90,6 +95,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                     }
                 }
             }
+            self.searchField.isEnabled = true
             self.findButton.isEnabled = true
         }
 
@@ -191,13 +197,16 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    @IBAction func startEditingSearch(_ sender: UITextField) {
+    func clearHighlights() {
         DispatchQueue.main.async { [unowned self] in
             print("editing started")
             for subview in self.pickedImage.subviews {
                 subview.removeFromSuperview()
             }
         }
+    }
+    @IBAction func startEditingSearch(_ sender: UITextField) {
+        clearHighlights()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
