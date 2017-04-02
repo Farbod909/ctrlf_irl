@@ -18,13 +18,17 @@ func printDebug(_ str: String) {
     print("************ END   DEBUG INFO ************")
 }
 
-class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBOutlet weak var pickedImage: UIImageView!
     @IBOutlet weak var searchField: UITextField!
+    @IBOutlet weak var findButton: UIButton!
+
+    var wordStore = [(String, String)]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchField.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,8 +56,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!){
-        pickedImage.image = image
         pickedImage.contentMode = .scaleAspectFit
+        pickedImage.image = image
         self.dismiss(animated: true, completion: nil);
     }
 
@@ -134,7 +138,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             printDebug("size of image uploaded (kb): \(Double(imageSize) / 1024.0) ")
         }
 
-        var wordStore = [(String, String)]()
 
         Alamofire.upload(imageData, to: "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=true", headers: headers).responseJSON { response in
 
@@ -142,7 +145,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             for region in json["regions"].arrayValue {
                 for line in region["lines"].arrayValue {
                     for word in line["words"].arrayValue {
-                        wordStore.append((word["text"].stringValue, word["boundingBox"].stringValue))
+                        self.wordStore.append((word["text"].stringValue, word["boundingBox"].stringValue))
                     }
                 }
             }
@@ -151,14 +154,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
             var highlightedBoundingBoxes = [String]()
 
-            for wordTuple in wordStore {
-                if wordTuple.0 == self.searchField.text! {
+            for wordTuple in self.wordStore {
+                if wordTuple.0.lowercased().contains(self.searchField.text!.lowercased()) {
                     highlightedBoundingBoxes.append(wordTuple.1)
                 }
             }
 
             if debugMode {
-                printDebug("all words: \(wordStore)")
+                printDebug("all words: \(self.wordStore)")
                 printDebug("boxes that should be highlighted: \(highlightedBoundingBoxes)")
             }
 
@@ -180,6 +183,19 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
         }
+    }
+    @IBAction func startEditingSearch(_ sender: UITextField) {
+        DispatchQueue.main.async { [unowned self] in
+            print("editing started")
+            for subview in self.pickedImage.subviews {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
+        self.findClicked(findButton)
+        return true
     }
 }
 
