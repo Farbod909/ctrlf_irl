@@ -10,6 +10,14 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
+let debugMode = true
+
+func printDebug(_ str: String) {
+    print("************ START DEBUG INFO ************")
+    print(str)
+    print("************ END   DEBUG INFO ************")
+}
+
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var pickedImage: UIImageView!
@@ -59,7 +67,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         context!.setStrokeColor(UIColor.yellow.cgColor)
         context!.setLineWidth(2.0)
 
-        context!.stroke(bounds)
+//        context!.stroke(bounds)
         context!.setFillColor(UIColor(red: 1, green: 1, blue: 0, alpha: 0.5).cgColor)
         context?.fill(bounds)
 
@@ -68,9 +76,51 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return image!
     }
 
+    func imageSizeAspectFit(imgview: UIImageView) -> CGSize {
+        var newwidth: CGFloat
+        var newheight: CGFloat
+        let image: UIImage = imgview.image!
+
+        if image.size.height >= image.size.width {
+            newheight = imgview.frame.size.height;
+            newwidth = (image.size.width / image.size.height) * newheight
+            if newwidth > imgview.frame.size.width {
+                let diff: CGFloat = imgview.frame.size.width - newwidth
+                newheight = newheight + diff / newheight * newheight
+                newwidth = imgview.frame.size.width
+            }
+        }
+        else {
+            newwidth = imgview.frame.size.width
+            newheight = (image.size.height / image.size.width) * newwidth
+            if newheight > imgview.frame.size.height {
+                let diff: CGFloat = imgview.frame.size.height - newheight
+                newwidth = newwidth + diff / newwidth * newwidth
+                newheight = imgview.frame.size.height
+            }
+        }
+
+        if debugMode {
+            print("BELOW IS NEW WIDTH, NEW HEIGHT")
+            print(newwidth, newheight)
+            print("BELOW IS OLD WIDTH, OLD HEIGHT")
+            print(self.pickedImage.frame.size.width, self.pickedImage.frame.size.height)
+        }
+
+
+        //adapt UIImageView size to image size
+        return CGSize(width: newwidth, height: newheight)
+    }
+
 
     @IBAction func findClicked(_ sender: UIButton) {
         searchField.resignFirstResponder()
+
+        let photoSize = imageSizeAspectFit(imgview: self.pickedImage)
+        let topMargin = (self.pickedImage.frame.size.height-photoSize.height)/2
+        let box_max_width: CGFloat = 2432.0
+        let box_max_height: CGFloat = 3243.0
+        let padding: CGFloat = 5.0
 
         let headers: HTTPHeaders = [
             "Content-Type": "application/octet-stream",
@@ -78,6 +128,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ]
 
         let imageData = UIImageJPEGRepresentation(pickedImage.image!, 0.99)!
+
+        if debugMode {
+            let imageSize: Int = imageData.count
+            printDebug("size of image uploaded (kb): \(Double(imageSize) / 1024.0) ")
+        }
 
         var wordStore = [(String, String)]()
 
@@ -92,6 +147,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
 
+
+
             var highlightedBoundingBoxes = [String]()
 
             for wordTuple in wordStore {
@@ -100,21 +157,23 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
 
-//            print(highlightedBoundingBoxes)
+            if debugMode {
+                printDebug("all words: \(wordStore)")
+                printDebug("boxes that should be highlighted: \(highlightedBoundingBoxes)")
+            }
 
             DispatchQueue.main.async { [unowned self] in
                 for box in highlightedBoundingBoxes {
                     let box_vals = box.components(separatedBy: ",")
 
-                    print(box_vals)
-
-                    let x: CGFloat = CGFloat(Int(box_vals[0])!)/6.2
-                    let y: CGFloat = CGFloat(Int(box_vals[1])!)/5.8
-                    let w: CGFloat = CGFloat(Int(box_vals[2])!)/4.0
-                    let h: CGFloat = CGFloat(Int(box_vals[3])!)/4.0
+                    let x: CGFloat = CGFloat(Int(box_vals[0])!)*(photoSize.width/box_max_width)-padding     // /6.2
+                    let y: CGFloat = CGFloat(Int(box_vals[1])!)*(photoSize.height/box_max_height)+topMargin-padding     // /5.8
+                    let w: CGFloat = CGFloat(Int(box_vals[2])!)*(photoSize.width/box_max_width)+padding     // /5.2
+                    let h: CGFloat = CGFloat(Int(box_vals[3])!)*(photoSize.height/box_max_height)+padding     // /4.0
 
                     let imageSize = CGSize(width: w, height: h)
                     let imageView = UIImageView(frame: CGRect(origin: CGPoint(x: x, y: y), size: imageSize))
+
                     self.pickedImage.addSubview(imageView)
                     let image = self.drawCustomImage(size: imageSize)
                     imageView.image = image
