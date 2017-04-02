@@ -5,4 +5,5 @@ use_frameworks!
 
 target 'ctrlf_irl' do
     pod 'Alamofire'
+    pod 'SwiftyJSON'
 end
