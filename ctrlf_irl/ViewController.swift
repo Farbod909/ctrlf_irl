@@ -17,18 +17,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
-//        Alamofire.request("https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=true", method: .post, parameters: parameters, encoding: JSONEncoding.default, headers: headers).responseJSON { response in
-//            if let JSON = response.result.value {
-//                //print("JSON: \(JSON)")
-//            }
-//        }
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     @IBAction func cameraButtonAction(_ sender: UIButton) {
@@ -57,6 +49,26 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         self.dismiss(animated: true, completion: nil);
     }
 
+    func drawCustomImage(size: CGSize) -> UIImage {
+        let bounds = CGRect(origin: CGPoint.zero, size: size)
+        let opaque = false
+        let scale: CGFloat = 0
+        UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
+        let context = UIGraphicsGetCurrentContext()
+
+        context!.setStrokeColor(UIColor.yellow.cgColor)
+        context!.setLineWidth(2.0)
+
+        context!.stroke(bounds)
+        context!.setFillColor(UIColor(red: 1, green: 1, blue: 0, alpha: 0.5).cgColor)
+        context?.fill(bounds)
+
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image!
+    }
+
+
     @IBAction func findClicked(_ sender: UIButton) {
         searchField.resignFirstResponder()
 
@@ -65,17 +77,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             "Ocp-Apim-Subscription-Key": "694773d0aa5d4f0b9ed096a2e8e1fc29"
         ]
 
-
         let imageData = UIImageJPEGRepresentation(pickedImage.image!, 0.99)!
-
-//        let imageSize: Int = imageData.count
-//        print("size of image in KB: %f ", imageSize / 1024)
 
         var wordStore = [(String, String)]()
 
         Alamofire.upload(imageData, to: "https://westus.api.cognitive.microsoft.com/vision/v1.0/ocr?language=unk&detectOrientation=true", headers: headers).responseJSON { response in
-
-
 
             let json = JSON(data: response.data!)
             for region in json["regions"].arrayValue {
@@ -94,11 +100,27 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 }
             }
 
-            print(highlightedBoundingBoxes)
+//            print(highlightedBoundingBoxes)
 
+            DispatchQueue.main.async { [unowned self] in
+                for box in highlightedBoundingBoxes {
+                    let box_vals = box.components(separatedBy: ",")
 
+                    print(box_vals)
+
+                    let x: CGFloat = CGFloat(Int(box_vals[0])!)/6.2
+                    let y: CGFloat = CGFloat(Int(box_vals[1])!)/5.8
+                    let w: CGFloat = CGFloat(Int(box_vals[2])!)/4.0
+                    let h: CGFloat = CGFloat(Int(box_vals[3])!)/4.0
+
+                    let imageSize = CGSize(width: w, height: h)
+                    let imageView = UIImageView(frame: CGRect(origin: CGPoint(x: x, y: y), size: imageSize))
+                    self.pickedImage.addSubview(imageView)
+                    let image = self.drawCustomImage(size: imageSize)
+                    imageView.image = image
+                }
+            }
         }
-
     }
 }
 
