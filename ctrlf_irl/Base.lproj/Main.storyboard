@@ -26,16 +26,13 @@
                                 <rect key="frame" x="0.0" y="77" width="375" height="517"/>
                             </imageView>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="What would you like to find?" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Odb-pE-klM">
-                                <rect key="frame" x="11" y="36" width="312" height="30"/>
+                                <rect key="frame" x="11" y="36" width="348" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="LtC-Oc-ScR"/>
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                 <textInputTraits key="textInputTraits"/>
-                                <connections>
-                                    <action selector="startEditingSearch:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="ooD-Ln-iLi"/>
-                                </connections>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mfu-Bi-Xdw">
                                 <rect key="frame" x="115" y="617" width="45" height="30"/>
@@ -68,43 +65,39 @@
                                     <constraint firstAttribute="width" constant="17" id="kyQ-h5-vHP"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="64k-DG-W0U">
-                                <rect key="frame" x="323" y="36" width="52" height="30"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mjt-zT-egI">
+                                <rect key="frame" x="304" y="621" width="55" height="23"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="52" id="AC5-ZX-UKR"/>
-                                    <constraint firstAttribute="height" constant="30" id="Iui-4s-8xi"/>
+                                    <constraint firstAttribute="width" constant="55" id="obz-zd-RnY"/>
+                                    <constraint firstAttribute="height" constant="23" id="urc-2R-UuS"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                <state key="normal" title="Find">
-                                    <color key="titleColor" red="0.35294117650000001" green="0.76862745099999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
+                                <state key="normal" title="Button" image="clip"/>
                                 <connections>
-                                    <action selector="findClicked:" destination="BYZ-38-t0r" eventType="touchUpInside" id="t1U-fu-y8r"/>
+                                    <segue destination="hFc-Tg-AxR" kind="presentation" identifier="showClipboard" id="xjU-LE-xT7"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailingMargin" secondItem="64k-DG-W0U" secondAttribute="trailing" constant="-16" id="2et-kz-4K6"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="NHf-yd-avU" secondAttribute="bottom" constant="73" id="3RM-Lk-8pm"/>
                             <constraint firstItem="IlZ-Bq-WdQ" firstAttribute="leading" secondItem="9nL-zJ-pMT" secondAttribute="trailing" constant="18" id="Bmy-4f-oYI"/>
                             <constraint firstItem="NHf-yd-avU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-16" id="IXk-48-k0b"/>
-                            <constraint firstItem="NHf-yd-avU" firstAttribute="top" secondItem="64k-DG-W0U" secondAttribute="bottom" constant="11" id="K3I-BO-9M1"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9nL-zJ-pMT" secondAttribute="bottom" constant="24" id="Kpo-yg-kKd"/>
                             <constraint firstItem="Odb-pE-klM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-5" id="T5L-4F-JAD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Odb-pE-klM" secondAttribute="trailing" id="WZ7-qP-ZSd"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="mfu-Bi-Xdw" secondAttribute="bottom" constant="20" id="Wes-PG-ijw"/>
                             <constraint firstItem="NHf-yd-avU" firstAttribute="top" secondItem="Odb-pE-klM" secondAttribute="bottom" constant="11" id="X9G-hc-9fP"/>
                             <constraint firstItem="9nL-zJ-pMT" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="b5r-pC-D15"/>
                             <constraint firstItem="Odb-pE-klM" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="jJq-aW-LN3"/>
-                            <constraint firstItem="64k-DG-W0U" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="16" id="mKL-mE-Z6x"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mjt-zT-egI" secondAttribute="trailing" id="kXX-MR-oBD"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="IlZ-Bq-WdQ" secondAttribute="bottom" constant="20" id="vao-zW-s7A"/>
-                            <constraint firstItem="64k-DG-W0U" firstAttribute="leading" secondItem="Odb-pE-klM" secondAttribute="trailing" id="vmD-zm-asX"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="mjt-zT-egI" secondAttribute="bottom" constant="23" id="xHr-bd-bqu"/>
                             <constraint firstAttribute="trailingMargin" secondItem="NHf-yd-avU" secondAttribute="trailing" constant="-16" id="xMC-Ak-hnf"/>
                             <constraint firstItem="9nL-zJ-pMT" firstAttribute="leading" secondItem="mfu-Bi-Xdw" secondAttribute="trailing" constant="19" id="xi5-DZ-5MM"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="findButton" destination="64k-DG-W0U" id="vcl-FH-QOj"/>
+                        <outlet property="clipboardButton" destination="mjt-zT-egI" id="vQc-Cg-jBM"/>
                         <outlet property="pickedImage" destination="NHf-yd-avU" id="af7-7a-cyw"/>
                         <outlet property="searchField" destination="Odb-pE-klM" id="zT5-Cd-RRJ"/>
                     </connections>
@@ -113,9 +106,55 @@
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="137.18140929535232"/>
         </scene>
+        <!--Clipboard View Controller-->
+        <scene sceneID="vuJ-W8-Gmz">
+            <objects>
+                <viewController id="hFc-Tg-AxR" customClass="ClipboardViewController" customModule="ctrlf_irl" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="OaL-8j-rco"/>
+                        <viewControllerLayoutGuide type="bottom" id="uho-DG-9n8"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="DkX-sI-obQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="fCC-My-ghA">
+                                <rect key="frame" x="16" y="58" width="343" height="589"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ozO-vD-GqS">
+                                <rect key="frame" x="16" y="28" width="48" height="30"/>
+                                <state key="normal" title="Cancel"/>
+                                <connections>
+                                    <action selector="cancelPressed:" destination="hFc-Tg-AxR" eventType="touchUpInside" id="l59-oJ-A4h"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="uho-DG-9n8" firstAttribute="top" secondItem="fCC-My-ghA" secondAttribute="bottom" constant="20" id="9Y3-XK-t2E"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="fCC-My-ghA" secondAttribute="trailing" id="F9X-K2-6ro"/>
+                            <constraint firstItem="ozO-vD-GqS" firstAttribute="top" secondItem="OaL-8j-rco" secondAttribute="bottom" constant="8" id="Vxc-0a-Yb1"/>
+                            <constraint firstItem="fCC-My-ghA" firstAttribute="centerX" secondItem="DkX-sI-obQ" secondAttribute="centerX" id="Z5y-S0-bPm"/>
+                            <constraint firstItem="fCC-My-ghA" firstAttribute="top" secondItem="ozO-vD-GqS" secondAttribute="bottom" id="kdP-q3-YFZ"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="ozO-vD-GqS" secondAttribute="leading" id="mYd-zs-XEI"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="clipboard" destination="fCC-My-ghA" id="Dwc-ZA-UhW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2qm-qd-fIv" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1146.4000000000001" y="137.18140929535232"/>
+        </scene>
     </scenes>
     <resources>
         <image name="cam" width="301" height="202"/>
+        <image name="clip" width="292" height="128"/>
         <image name="gal" width="300" height="201"/>
         <image name="skim" width="998" height="998"/>
     </resources>

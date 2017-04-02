@@ -22,17 +22,21 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
     @IBOutlet weak var pickedImage: UIImageView!
     @IBOutlet weak var searchField: UITextField!
-    @IBOutlet weak var findButton: UIButton!
+    @IBOutlet weak var clipboardButton: UIButton!
 
     var wordStore = [(String, String)]()
+    var clipboardString = ""
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
         searchField.delegate = self
+        searchField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
 
-        findButton.setTitleColor(UIColor(red: 0.8, green: 0.8, blue: 0.8, alpha: 1), for: .disabled)
-        findButton.isEnabled = false
+        clipboardButton.setImage(UIImage(named: "blank"), for: .disabled)
+
         searchField.isEnabled = false
+        clipboardButton.isEnabled = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -66,8 +70,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
 
         clearHighlights()
         searchField.text = ""
-        findButton.isEnabled = false
         searchField.isEnabled = false
+        clipboardButton.isEnabled = false
         self.getWordStore()
     }
 
@@ -92,11 +96,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 for line in region["lines"].arrayValue {
                     for word in line["words"].arrayValue {
                         self.wordStore.append((word["text"].stringValue, word["boundingBox"].stringValue))
+                        self.clipboardString += word["text"].stringValue + " "
                     }
+                    self.clipboardString += "\n"
                 }
+                self.clipboardString += "\n"
             }
             self.searchField.isEnabled = true
-            self.findButton.isEnabled = true
+            self.clipboardButton.isEnabled = true
         }
 
     }
@@ -111,7 +118,6 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         context!.setStrokeColor(UIColor.yellow.cgColor)
         context!.setLineWidth(2.0)
 
-//        context!.stroke(bounds)
         context!.setFillColor(UIColor(red: 1, green: 1, blue: 0, alpha: 0.5).cgColor)
         context?.fill(bounds)
 
@@ -156,10 +162,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         return CGSize(width: newwidth, height: newheight)
     }
 
-
-    @IBAction func findClicked(_ sender: UIButton) {
-        searchField.resignFirstResponder()
-
+    func search() {
         let photoSize = imageSizeAspectFit(imgview: self.pickedImage)
         let topMargin = (self.pickedImage.frame.size.height-photoSize.height)/2
         let box_max_width: CGFloat = 2432.0
@@ -197,6 +200,12 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
+
+
+    @IBAction func findClicked(_ sender: UIButton) {
+        searchField.resignFirstResponder()
+        search()
+    }
     func clearHighlights() {
         DispatchQueue.main.async { [unowned self] in
             print("editing started")
@@ -205,16 +214,22 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
         }
     }
-    @IBAction func startEditingSearch(_ sender: UITextField) {
-        clearHighlights()
-    }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {   //delegate method
-        if self.wordStore.count > 0 {
-            self.findClicked(findButton)
-            return true
+        textField.resignFirstResponder()
+        return true
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "showClipboard" {
+            if let viewController = segue.destination as? ClipboardViewController {
+                viewController.clipboardText = self.clipboardString
+            }
         }
-        return false
+    }
+    func textFieldDidChange(_ textField: UITextField) {
+        clearHighlights()
+        search()
     }
 }
 

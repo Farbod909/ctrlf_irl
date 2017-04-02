@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8EC644E81E9117E000B2E37B /* ClipboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EC644E71E9117E000B2E37B /* ClipboardViewController.swift */; };
 		8ED7AA7A1E9037660034AD8A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED7AA791E9037660034AD8A /* AppDelegate.swift */; };
 		8ED7AA7C1E9037660034AD8A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ED7AA7B1E9037660034AD8A /* ViewController.swift */; };
 		8ED7AA7F1E9037660034AD8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8ED7AA7D1E9037660034AD8A /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		1513F4C86DCBAB1F2B380CD9 /* Pods_ctrlf_irl.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ctrlf_irl.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F2FB583AFDD774B7061960B /* Pods-ctrlf_irl.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ctrlf_irl.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ctrlf_irl/Pods-ctrlf_irl.debug.xcconfig"; sourceTree = "<group>"; };
+		8EC644E71E9117E000B2E37B /* ClipboardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ClipboardViewController.swift; sourceTree = "<group>"; };
 		8ED7AA761E9037660034AD8A /* ctrlf_irl.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ctrlf_irl.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8ED7AA791E9037660034AD8A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8ED7AA7B1E9037660034AD8A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				8ED7AA801E9037660034AD8A /* Assets.xcassets */,
 				8ED7AA821E9037660034AD8A /* LaunchScreen.storyboard */,
 				8ED7AA851E9037660034AD8A /* Info.plist */,
+				8EC644E71E9117E000B2E37B /* ClipboardViewController.swift */,
 			);
 			path = ctrlf_irl;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8ED7AA7C1E9037660034AD8A /* ViewController.swift in Sources */,
+				8EC644E81E9117E000B2E37B /* ClipboardViewController.swift in Sources */,
 				8ED7AA7A1E9037660034AD8A /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
