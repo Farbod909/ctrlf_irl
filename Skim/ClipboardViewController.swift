@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  ctrlf_irl
+//  ClipboardViewController.swift
+//  Skim
 //
 //  Created by Farbod Rafezy on 4/2/17.
 //  Copyright © 2017 Farbod Rafezy. All rights reserved.

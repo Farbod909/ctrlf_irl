@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  ctrlf_irl
+//  Skim
 //
 //  Created by Farbod Rafezy on 4/1/17.
 //  Copyright © 2017 Farbod Rafezy. All rights reserved.
@@ -13,9 +13,7 @@ import SwiftyJSON
 let debugMode = true
 
 func printDebug(_ str: String) {
-    print("************ START DEBUG INFO ************")
-    print(str)
-    print("************ END   DEBUG INFO ************")
+    print("DEBUGGER: ", str)
 }
 
 class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {

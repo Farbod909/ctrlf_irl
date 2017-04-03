@@ -13,7 +13,7 @@
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="ctrlf_irl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Skim" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -109,7 +109,7 @@
         <!--Clipboard View Controller-->
         <scene sceneID="vuJ-W8-Gmz">
             <objects>
-                <viewController id="hFc-Tg-AxR" customClass="ClipboardViewController" customModule="ctrlf_irl" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hFc-Tg-AxR" customClass="ClipboardViewController" customModule="Skim" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OaL-8j-rco"/>
                         <viewControllerLayoutGuide type="bottom" id="uho-DG-9n8"/>

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.swift
-//  ctrlf_irl
+//  Skim
 //
 //  Created by Farbod Rafezy on 4/1/17.
 //  Copyright © 2017 Farbod Rafezy. All rights reserved.
