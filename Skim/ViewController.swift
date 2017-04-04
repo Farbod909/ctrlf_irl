@@ -70,6 +70,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         searchField.text = ""
         searchField.isEnabled = false
         clipboardButton.isEnabled = false
+        searchField.placeholder = "Loading..."
         self.getWordStore()
     }
 
@@ -102,6 +103,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             }
             self.searchField.isEnabled = true
             self.clipboardButton.isEnabled = true
+            self.searchField.placeholder = "What would you like to find?"
         }
 
     }
