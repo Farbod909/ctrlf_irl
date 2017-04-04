@@ -71,6 +71,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         searchField.isEnabled = false
         clipboardButton.isEnabled = false
         searchField.placeholder = "Loading..."
+        clipboardString = ""
         self.getWordStore()
     }
 
